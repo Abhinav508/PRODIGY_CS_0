@@ -1,0 +1,43 @@
+from PIL import Image
+
+def encrypt_image(input_path, output_path, key):
+    # Open the image correctly
+    img = Image.open(input_path)
+    img = img.convert("RGB")  # Ensure image is in RGB mode
+
+    pixels = img.load()
+    width, height = img.size
+
+    for x in range(width):
+        for y in range(height):
+            r, g, b = pixels[x, y]
+            # Simple encryption: add key to RGB values
+            pixels[x, y] = ((r + key) % 256, (g + key) % 256, (b + key) % 256)
+
+    img.save(output_path)
+    print("Image encrypted and saved as", output_path)
+
+def decrypt_image(input_path, output_path, key):
+    # Open the image correctly
+    img = Image.open(input_path)
+    img = img.convert("RGB")
+
+    pixels = img.load()
+    width, height = img.size
+
+    for x in range(width):
+        for y in range(height):
+            r, g, b = pixels[x, y]
+            # Decryption: subtract key from RGB values
+            pixels[x, y] = ((r - key + 256) % 256, (g - key + 256) % 256, (b - key + 256) % 256)
+
+    img.save(output_path)
+    print("Image decrypted and saved as", output_path)
+
+# --- USAGE EXAMPLE ---
+
+# Encrypt
+encrypt_image(r"F:\abhinn\Downloads\th.jpeg", "encrypted.jpg", key=50)
+
+# Decrypt
+decrypt_image("encrypted.jpg", "decrypted.jpg", key=50)
